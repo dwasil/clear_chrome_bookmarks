@@ -75,7 +75,8 @@ async function checkUrl(url) {
     const response = await fetch(url, {
       method: 'HEAD',
       signal: controller.signal,
-      redirect: 'follow'
+      redirect: 'follow',
+      credentials: 'omit'  // Prevent auth popups (WWW-Authenticate)
     });
 
     clearTimeout(timeoutId);
