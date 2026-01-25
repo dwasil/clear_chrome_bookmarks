@@ -30,6 +30,13 @@ let scanCancelled = false;
 function showScreen(screenId) {
   Object.values(screens).forEach(screen => screen.classList.remove('active'));
   screens[screenId].classList.add('active');
+
+  // Make popup wider for results screen
+  if (screenId === 'results') {
+    document.body.classList.add('wide');
+  } else {
+    document.body.classList.remove('wide');
+  }
 }
 
 // Get all bookmarks recursively
@@ -63,7 +70,7 @@ async function checkUrl(url) {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const response = await fetch(url, {
       method: 'HEAD',
@@ -74,8 +81,12 @@ async function checkUrl(url) {
     clearTimeout(timeoutId);
     console.log('Response for', url, ':', response.status);
 
-    // Consider 2xx and 3xx as alive
-    if (response.ok || (response.status >= 300 && response.status < 400)) {
+    if (
+      response.ok 
+      || response.status === 401 
+      || response.status === 403
+      || (response.status >= 200 && response.status <= 399)
+    ) {
       return { status: 'alive', code: response.status };
     }
 
