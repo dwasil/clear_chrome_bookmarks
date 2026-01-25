@@ -164,6 +164,7 @@ button {
 #results-table-container {
   max-height: 250px;
   overflow-y: auto;
+  overflow-x: hidden;
   margin-bottom: 15px;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -172,6 +173,7 @@ button {
 #results-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 #results-table th,
@@ -208,8 +210,6 @@ button {
   font-size: 11px;
   color: #999;
   display: block;
-  word-break: break-all;
-  max-width: 700px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
