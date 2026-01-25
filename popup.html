@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dead Bookmarks Finder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Screen 1: Welcome -->
+  <div id="screen-welcome" class="screen active">
+    <h1>Dead Bookmarks Finder</h1>
+    <p class="description">
+      This extension helps you find and remove broken bookmark links.
+      It will check all your bookmarks and identify those that no longer work.
+    </p>
+    <button id="btn-start" class="btn-primary">Find dead bookmarks</button>
+  </div>
+
+  <!-- Screen 2: Scanning -->
+  <div id="screen-scanning" class="screen">
+    <h1>Scanning Bookmarks</h1>
+    <p id="scan-status">Preparing...</p>
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    <p id="scan-progress">0 / 0</p>
+    <button id="btn-cancel" class="btn-secondary">Cancel</button>
+  </div>
+
+  <!-- Screen 3: Results -->
+  <div id="screen-results" class="screen">
+    <h1>Results</h1>
+    <div id="stats" class="stats"></div>
+    <div id="message" class="message"></div>
+    <div id="results-table-container">
+      <table id="results-table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="select-all" checked></th>
+            <th>Bookmark</th>
+          </tr>
+        </thead>
+        <tbody id="dead-list"></tbody>
+      </table>
+    </div>
+    <div class="buttons">
+      <button id="btn-back" class="btn-secondary">Back</button>
+      <button id="btn-delete" class="btn-danger">Delete selected bookmarks</button>
+    </div>
+  </div>
+
+  <!-- Screen 4: Completion -->
+  <div id="screen-completion" class="screen">
+    <h1>Done!</h1>
+    <p id="completion-message"></p>
+    <p class="hint">Redirecting to start...</p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
