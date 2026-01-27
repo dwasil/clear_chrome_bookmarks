@@ -1,0 +1,59 @@
+Chrome Web Store - Short Description (132 chars max)
+
+Scan your bookmarks, find broken links (404, timeouts, errors), and delete dead bookmarks in bulk. One-click bookmark cleanup tool!
+
+
+
+Chrome Web Store - Detailed Description
+
+🔍 BOOKMARK CLEANER - Find & Remove Broken Links
+
+Tired of clicking bookmarks that lead nowhere? Bookmark Cleaner automatically scans your entire bookmark library and identifies dead links so you can remove them in seconds.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ HOW IT WORKS
+
+1. Click "Find dead bookmarks"
+2. Wait for the scan to complete
+3. Review detected broken links
+4. Delete selected bookmarks with one click
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ KEY FEATURES
+
+• Automatic scanning – Checks all your bookmarks at once
+• Detects multiple error types – 404 errors, server errors, timeouts, connection failures
+• Bulk deletion – Remove hundreds of broken bookmarks in one click
+• Selective cleanup – Choose which bookmarks to delete
+• Clean statistics – See exactly how many bookmarks were checked and how many are broken
+• Fast & lightweight – No bloat, no tracking, just works
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 PERFECT FOR
+
+• Users with hundreds or thousands of bookmarks
+• Anyone who hasn't cleaned their bookmarks in years
+• People who want faster, clutter-free browsing
+• Professionals managing research bookmarks
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔒 PRIVACY FIRST
+
+• No data collection
+• No analytics or tracking
+• Works entirely in your browser
+• Open source
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 WHY CLEAN YOUR BOOKMARKS?
+
+Over time, websites shut down, pages get deleted, and URLs change. Studies show that 30-40% of links break within just a few years. Don't waste time clicking dead links – clean them up today!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Keywords: bookmark cleaner, broken bookmarks, dead links, bookmark manager, remove broken links, delete dead bookmarks, bookmark organizer, link checker, 404 finder, bookmark cleanup, broken link finder, bookmark maintenance

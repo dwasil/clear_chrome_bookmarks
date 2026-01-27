@@ -9,7 +9,7 @@ Cartoonish, Halloween-fun aesthetic (not scary), vibrant colors
 ## Composition
 - **Background:** Bright purple/orange sunset sky with playful clouds
 - **Scene:** Small graveyard with 3-4 tombstones shaped like bookmarks
-- **Tombstones text:** "404", "Timeout", "Gone", "Error 500"
+- **Tombstones text:** "404", "Timeout", "Gone", "Permanently Deleted"
 - **Character:** Your extension icon (blue bookmark with magnifying glass) floating like a friendly ghost-buster, wearing a tiny detective hat
 - **Details:** Small skulls with broken chain links, wilted flowers that look like broken hyperlinks
 
@@ -21,14 +21,15 @@ Cartoonish, Halloween-fun aesthetic (not scary), vibrant colors
 - Accents: #E74C3C (red), #F39C12 (yellow glow)
 
 ## Text Overlay
-- Main: "Find & Remove Dead Bookmarks"
+- Main: "Hero Bookmark Cleaner"
 - Sub: "Clean up your browser in seconds!"
 
 ## Mood
 Humorous, lighthearted, "let's get rid of those dead things!"
 
 ## Image Dimensions
-1280 x 800 px (Chrome Web Store promotional)
+1400 x 560 Canvas JPEG or 24-bit PNG (no alpha)
+440 x 280 Canvas JPEG or 24-bit PNG (no alpha)
 
 ## AI Prompt (for image generation)
 ```
