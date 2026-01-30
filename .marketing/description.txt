@@ -1,23 +1,25 @@
 Chrome Web Store - Short Description (132 chars max)
 
-Scan your bookmarks, find broken links (404, timeouts, errors), and delete dead bookmarks in bulk. One-click bookmark cleanup tool!
+Bookmarks clean up tool: scan for broken links (404, timeouts, errors) and delete dead bookmarks in bulk. One-click bookmarks clear!
 
 
 
 Chrome Web Store - Detailed Description
 
-🔍 BOOKMARK CLEANER - Find & Remove Broken Links
+🔍 BOOKMARKS CLEAN UP - Find & Remove Broken Links
 
-Tired of clicking bookmarks that lead nowhere? Bookmark Cleaner automatically scans your entire bookmark library and identifies dead links so you can remove them in seconds.
+Tired of clicking bookmarks that lead nowhere? Wondering how to clear bookmarks that no longer work? Bookmark Cleaner for bookmarks Chrome extension automatically scans your entire bookmark library and identifies dead links so you can remove them in seconds. Take control of my bookmarks — find and delete every broken link in your bookmarks Google Chrome collection.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✅ HOW IT WORKS
+✅ HOW TO CLEAR BOOKMARKS WITH BROKEN LINKS
 
 1. Click "Find dead bookmarks"
 2. Wait for the scan to complete
 3. Review detected broken links
 4. Delete selected bookmarks with one click
+
+That's all it takes to keep your bookmarks clean and organized!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -27,15 +29,15 @@ Tired of clicking bookmarks that lead nowhere? Bookmark Cleaner automatically sc
 • Detects multiple error types – 404 errors, server errors, timeouts, connection failures
 • Bulk deletion – Remove hundreds of broken bookmarks in one click
 • Selective cleanup – Choose which bookmarks to delete
-• Clean statistics – See exactly how many bookmarks were checked and how many are broken
+• Bookmarks clear statistics – See exactly how many bookmarks were checked and how many are broken
 • Fast & lightweight – No bloat, no tracking, just works
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 PERFECT FOR
 
-• Users with hundreds or thousands of bookmarks
-• Anyone who hasn't cleaned their bookmarks in years
+• Users with hundreds or thousands of bookmarks who need a bookmarks clean up
+• Anyone who hasn't cleaned my bookmarks in years
 • People who want faster, clutter-free browsing
 • Professionals managing research bookmarks
 
@@ -50,10 +52,10 @@ Tired of clicking bookmarks that lead nowhere? Bookmark Cleaner automatically sc
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📊 WHY CLEAN YOUR BOOKMARKS?
+📊 WHY KEEP YOUR BOOKMARKS CLEAN?
 
-Over time, websites shut down, pages get deleted, and URLs change. Studies show that 30-40% of links break within just a few years. Don't waste time clicking dead links – clean them up today!
+Over time, websites shut down, pages get deleted, and URLs change. Studies show that 30-40% of links break within just a few years. Don't waste time clicking dead links – do a bookmarks clean up today and keep your browser organized!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Keywords: bookmark cleaner, broken bookmarks, dead links, bookmark manager, remove broken links, delete dead bookmarks, bookmark organizer, link checker, 404 finder, bookmark cleanup, broken link finder, bookmark maintenance
+Keywords: bookmark cleaner, bookmarks clear, how to clear bookmarks, bookmarks clean, bookmarks clean up, bookmarks chrome, bookmarks google, my bookmarks, broken bookmarks, dead links, bookmark manager, remove broken links, delete dead bookmarks, bookmark organizer, link checker, 404 finder, bookmark cleanup, broken link finder, bookmark maintenance
