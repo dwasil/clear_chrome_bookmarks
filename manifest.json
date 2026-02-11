@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Bookmark Cleaner - Find & Remove Broken Links",
   "version": "1.0",
-  "description": "Scan bookmarks, detect dead links (404, timeouts, etc ...), and delete broken bookmarks in bulk. Keep your bookmarks clean!",
+  "description": "Do you have hundreds of bookmarks that lead nowhere? Bookmark Cleaner scans all your bookmarks, detects dead links (404 errors, timeouts, server errors), and lets you delete them in one click. Fast, lightweight, no data collection. Keep your browser clean.",
   "permissions": ["bookmarks"],
   "host_permissions": ["<all_urls>"],
   "action": {
