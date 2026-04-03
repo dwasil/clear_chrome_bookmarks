@@ -8,6 +8,6 @@ rm -f "$zip_name"
 
 
 # Create the zip, including all files in the current directory (not the directory itself), excluding .git directory
-zip -r "$zip_name" . -x "./.git/*" -x "./pack.sh" -x "./CLAUDE.md" -x "./.claude/*"
+zip -r "$zip_name" . -x "./.git/*" -x "./pack.sh" -x "./CLAUDE.md" -x "./.claude/*" -x "./.vscode/*" -x "./node_modules/*"
 
 echo "Created $zip_name with manifest.json at the root."

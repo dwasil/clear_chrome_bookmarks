@@ -1,1 +1,4 @@
+node_modules/*
+.git
+.marketing
 cleanup_bookmarks.zip

@@ -1,0 +1,12 @@
+{
+  "name": "bookmark-cleaner",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "jest tests/e2e"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "puppeteer": "^24.40.0"
+  }
+}

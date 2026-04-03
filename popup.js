@@ -119,6 +119,9 @@ async function scanBookmarks() {
   elements.scanStatus.textContent = 'Fetching bookmarks...';
   updateProgress(0, 0);
 
+  // Yield long enough for the browser to render the scanning screen
+  await new Promise(resolve => setTimeout(resolve, 150));
+
   const bookmarks = await getAllBookmarks();
   console.log('Found', bookmarks.length, 'bookmarks');
 
