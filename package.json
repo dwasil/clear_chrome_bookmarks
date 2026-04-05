@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "jest tests/e2e"
+    "test": "jest tests/e2e --runInBand"
   },
   "devDependencies": {
     "jest": "^29.7.0",
