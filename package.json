@@ -3,10 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "jest tests/e2e --runInBand"
+    "test": "jest tests/e2e --runInBand",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.4.0",
     "jest": "^29.7.0",
+    "prettier": "^3.8.1",
     "puppeteer": "^24.40.0"
   }
 }

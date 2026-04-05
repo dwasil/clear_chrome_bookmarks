@@ -10,8 +10,8 @@ async function launchBrowser() {
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,
       '--no-sandbox',
-      '--disable-setuid-sandbox'
-    ]
+      '--disable-setuid-sandbox',
+    ],
   });
 }
 
@@ -21,10 +21,10 @@ async function getExtensionId(browser) {
   while (Date.now() < deadline) {
     const targets = await browser.targets();
     const sw = targets.find(
-      t => t.type() === 'service_worker' && t.url().startsWith('chrome-extension://')
+      (t) => t.type() === 'service_worker' && t.url().startsWith('chrome-extension://')
     );
     if (sw) return new URL(sw.url()).hostname;
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 100));
   }
   throw new Error('Extension service worker not found within 5 seconds');
 }
@@ -43,12 +43,16 @@ async function getExtensionId(browser) {
  * @param {object} opts.fetchResponses - map of url → { status: number }
  * @param {Array}  [opts.removeFailIds] - bookmark IDs for which remove() should reject
  */
-async function openPopup(browser, { bookmarks = [], fetchResponses = {}, removeFailIds = [] } = {}) {
+async function openPopup(
+  browser,
+  { bookmarks = [], fetchResponses = {}, removeFailIds = [] } = {}
+) {
   const extensionId = await getExtensionId(browser);
   const page = await browser.newPage();
 
   // Inject mocks before popup.js executes
   await page.evaluateOnNewDocument(
+    /* eslint-disable no-undef */
     (bTree, fResponses, failIds) => {
       // --- chrome.bookmarks mocks ---
       chrome.bookmarks.getTree = () => Promise.resolve(bTree);
@@ -94,7 +98,7 @@ async function openPopup(browser, { bookmarks = [], fetchResponses = {}, removeF
 
           // Yield via a macrotask so Puppeteer's polling can observe the
           // scanning screen before the (instantaneous) mock scan completes.
-          await new Promise(r => setTimeout(r, 100));
+          await new Promise((r) => setTimeout(r, 100));
 
           const tree = await chrome.bookmarks.getTree();
           const allBookmarks = [];
@@ -107,10 +111,11 @@ async function openPopup(browser, { bookmarks = [], fetchResponses = {}, removeF
           traverse(tree);
 
           if (allBookmarks.length === 0) {
-            _popupListener && _popupListener({
-              type: 'SCAN_COMPLETE',
-              results: { total: 0, checked: 0, dead: [], skipped: 0 }
-            });
+            _popupListener &&
+              _popupListener({
+                type: 'SCAN_COMPLETE',
+                results: { total: 0, checked: 0, dead: [], skipped: 0 },
+              });
             return;
           }
 
@@ -122,11 +127,12 @@ async function openPopup(browser, { bookmarks = [], fetchResponses = {}, removeF
             }
 
             const bookmark = allBookmarks[i];
-            _popupListener && _popupListener({
-              type: 'SCAN_PROGRESS',
-              current: i + 1,
-              total: allBookmarks.length
-            });
+            _popupListener &&
+              _popupListener({
+                type: 'SCAN_PROGRESS',
+                current: i + 1,
+                total: allBookmarks.length,
+              });
 
             if (!bookmark.url.startsWith('http://') && !bookmark.url.startsWith('https://')) {
               results.skipped++;
@@ -139,42 +145,45 @@ async function openPopup(browser, { bookmarks = [], fetchResponses = {}, removeF
               const status = resp.status;
               const alive = resp.ok || status === 401 || status === 403;
               if (!alive) results.dead.push(bookmark);
-            } catch (_) {
+            } catch {
               results.checked++;
               results.dead.push(bookmark);
             }
           }
 
           _popupListener && _popupListener({ type: 'SCAN_COMPLETE', results });
-
         } else if (msg.type === 'CANCEL_SCAN') {
           _scanCancelled = true;
           _popupListener && _popupListener({ type: 'SCAN_CANCELLED' });
-
         } else if (msg.type === 'DELETE_BOOKMARKS') {
           let deleted = 0;
           for (const id of msg.ids) {
             try {
               await chrome.bookmarks.remove(id);
               deleted++;
-            } catch (_) {}
+            } catch {
+              /* ignore remove failures */
+            }
           }
           _popupListener && _popupListener({ type: 'DELETE_COMPLETE', deleted });
         }
       };
-    },
+    } /* eslint-enable no-undef */,
     bookmarks,
     fetchResponses,
     removeFailIds
   );
 
-  await page.goto(`chrome-extension://${extensionId}/popup.html`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`chrome-extension://${extensionId}/popup.html`, {
+    waitUntil: 'domcontentloaded',
+  });
   return page;
 }
 
 /** Wait until a screen element has the 'active' class. */
 async function waitForScreen(page, screenId, timeout = 15000) {
   await page.waitForFunction(
+    /* eslint-disable-next-line no-undef */
     (id) => document.getElementById(id)?.classList.contains('active'),
     { timeout },
     screenId
@@ -183,10 +192,12 @@ async function waitForScreen(page, screenId, timeout = 15000) {
 
 /** Assert that exactly one screen is active and it is the expected one. */
 async function assertScreen(page, screenId) {
-  const activeId = await page.evaluate(() => {
-    const el = document.querySelector('.screen.active');
-    return el ? el.id : null;
-  });
+  const activeId = await page.evaluate(
+    /* eslint-disable-next-line no-undef */ () => {
+      const el = document.querySelector('.screen.active');
+      return el ? el.id : null;
+    }
+  );
   expect(activeId).toBe(screenId);
 }
 

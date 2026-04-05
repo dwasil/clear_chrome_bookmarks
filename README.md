@@ -8,6 +8,7 @@ Over time, bookmarks rot — websites shut down, pages get deleted, URLs change.
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/YOUR_EXTENSION_ID)](https://chrome.google.com/webstore/detail/YOUR_EXTENSION_ID)
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/YOUR_EXTENSION_ID)](https://chrome.google.com/webstore/detail/YOUR_EXTENSION_ID)
 -->
+
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)](#)
 [![License](https://img.shields.io/badge/License-MIT-green)](#license)
 
@@ -39,6 +40,7 @@ Non-HTTP URLs (`chrome://`, `javascript:`, etc.) are skipped automatically and r
 ### From Chrome Web Store
 
 <!-- TODO: add link when published -->
+
 Coming soon.
 
 ### Manual (developer mode)
@@ -51,9 +53,9 @@ Coming soon.
 
 ## Permissions
 
-| Permission | Why it's needed |
-|---|---|
-| `bookmarks` | Read and delete bookmarks |
+| Permission                     | Why it's needed                                        |
+| ------------------------------ | ------------------------------------------------------ |
+| `bookmarks`                    | Read and delete bookmarks                              |
 | `host_permissions: <all_urls>` | Send HEAD requests to check if bookmark URLs are alive |
 
 No data leaves your browser. No analytics. No remote servers.

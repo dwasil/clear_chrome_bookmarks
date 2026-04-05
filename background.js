@@ -40,7 +40,7 @@ async function checkUrl(url) {
       method: 'HEAD',
       signal: controller.signal,
       redirect: 'follow',
-      credentials: 'omit'
+      credentials: 'omit',
     });
 
     clearTimeout(timeoutId);
@@ -69,7 +69,7 @@ async function checkUrl(url) {
 async function broadcastToPopup(msg) {
   try {
     await chrome.runtime.sendMessage(msg);
-  } catch (_) {
+  } catch {
     // Popup not open — state is in storage, popup will read it on next open
   }
 }
@@ -85,7 +85,7 @@ async function scanBookmarks() {
   await chrome.storage.local.set({
     scanStatus: 'scanning',
     scanProgress: { current: 0, total: 0 },
-    scanResults: null
+    scanResults: null,
   });
 
   const bookmarks = await getAllBookmarks();
@@ -96,7 +96,7 @@ async function scanBookmarks() {
   }
 
   await chrome.storage.local.set({
-    scanProgress: { current: 0, total: bookmarks.length }
+    scanProgress: { current: 0, total: bookmarks.length },
   });
 
   const results = { total: bookmarks.length, checked: 0, dead: [], skipped: 0 };
@@ -113,7 +113,11 @@ async function scanBookmarks() {
     const progress = { current: i + 1, total: bookmarks.length };
 
     await chrome.storage.local.set({ scanProgress: progress });
-    await broadcastToPopup({ type: 'SCAN_PROGRESS', current: progress.current, total: progress.total });
+    await broadcastToPopup({
+      type: 'SCAN_PROGRESS',
+      current: progress.current,
+      total: progress.total,
+    });
 
     if (!isCheckableUrl(bookmark.url)) {
       results.skipped++;
@@ -125,6 +129,10 @@ async function scanBookmarks() {
 
     if (result.status === 'dead') {
       results.dead.push(bookmark);
+
+      if (results.dead.length >= 3) {
+        await finishScan(results);
+      }
     }
   }
 
@@ -158,7 +166,7 @@ async function deleteBookmarks(ids) {
 // ── Message listener ──────────────────────────────────────────────────────────
 
 chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.type === 'START_SCAN')        scanBookmarks();
-  if (msg.type === 'CANCEL_SCAN')       scanCancelled = true;
-  if (msg.type === 'DELETE_BOOKMARKS')  deleteBookmarks(msg.ids);
+  if (msg.type === 'START_SCAN') scanBookmarks();
+  if (msg.type === 'CANCEL_SCAN') scanCancelled = true;
+  if (msg.type === 'DELETE_BOOKMARKS') deleteBookmarks(msg.ids);
 });

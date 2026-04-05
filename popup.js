@@ -3,7 +3,7 @@ const screens = {
   welcome: document.getElementById('screen-welcome'),
   scanning: document.getElementById('screen-scanning'),
   results: document.getElementById('screen-results'),
-  completion: document.getElementById('screen-completion')
+  completion: document.getElementById('screen-completion'),
 };
 
 const elements = {
@@ -19,13 +19,13 @@ const elements = {
   message: document.getElementById('message'),
   deadList: document.getElementById('dead-list'),
   resultsTableContainer: document.getElementById('results-table-container'),
-  completionMessage: document.getElementById('completion-message')
+  completionMessage: document.getElementById('completion-message'),
 };
 
 // ── Screen Management ─────────────────────────────────────────────────────────
 
 function showScreen(screenId) {
-  Object.values(screens).forEach(screen => screen.classList.remove('active'));
+  Object.values(screens).forEach((screen) => screen.classList.remove('active'));
   screens[screenId].classList.add('active');
 
   if (screenId === 'results') {
@@ -52,9 +52,8 @@ function escapeHtml(text) {
 function updateDeleteButton() {
   const checkedCount = elements.deadList.querySelectorAll('input[type="checkbox"]:checked').length;
   elements.btnDelete.disabled = checkedCount === 0;
-  elements.btnDelete.textContent = checkedCount > 0
-    ? `Delete selected bookmarks (${checkedCount})`
-    : 'Delete selected bookmarks';
+  elements.btnDelete.textContent =
+    checkedCount > 0 ? `Delete selected bookmarks (${checkedCount})` : 'Delete selected bookmarks';
 }
 
 function showResults(results) {
@@ -91,7 +90,7 @@ function showResults(results) {
   elements.selectAll.checked = true;
 
   elements.deadList.innerHTML = '';
-  results.dead.forEach(bookmark => {
+  results.dead.forEach((bookmark) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><input type="checkbox" data-id="${bookmark.id}" checked></td>
@@ -118,9 +117,9 @@ function showCompletion(deletedCount) {
 // ── Background message listener ───────────────────────────────────────────────
 
 chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.type === 'SCAN_PROGRESS')   updateProgress(msg.current, msg.total);
-  if (msg.type === 'SCAN_COMPLETE')   showResults(msg.results);
-  if (msg.type === 'SCAN_CANCELLED')  showScreen('welcome');
+  if (msg.type === 'SCAN_PROGRESS') updateProgress(msg.current, msg.total);
+  if (msg.type === 'SCAN_COMPLETE') showResults(msg.results);
+  if (msg.type === 'SCAN_CANCELLED') showScreen('welcome');
   if (msg.type === 'DELETE_COMPLETE') showCompletion(msg.deleted);
 });
 
@@ -128,7 +127,9 @@ chrome.runtime.onMessage.addListener((msg) => {
 
 async function restoreState() {
   const { scanStatus, scanProgress, scanResults } = await chrome.storage.local.get([
-    'scanStatus', 'scanProgress', 'scanResults'
+    'scanStatus',
+    'scanProgress',
+    'scanResults',
   ]);
 
   if (scanStatus === 'scanning') {
@@ -161,7 +162,7 @@ elements.btnBack.addEventListener('click', () => {
 
 elements.btnDelete.addEventListener('click', () => {
   const checkboxes = elements.deadList.querySelectorAll('input[type="checkbox"]:checked');
-  const ids = Array.from(checkboxes).map(cb => cb.dataset.id);
+  const ids = Array.from(checkboxes).map((cb) => cb.dataset.id);
   elements.btnDelete.disabled = true;
   elements.btnDelete.textContent = 'Deleting...';
   chrome.runtime.sendMessage({ type: 'DELETE_BOOKMARKS', ids });
@@ -169,14 +170,14 @@ elements.btnDelete.addEventListener('click', () => {
 
 elements.selectAll.addEventListener('change', (e) => {
   const checkboxes = elements.deadList.querySelectorAll('input[type="checkbox"]');
-  checkboxes.forEach(cb => cb.checked = e.target.checked);
+  checkboxes.forEach((cb) => (cb.checked = e.target.checked));
   updateDeleteButton();
 });
 
 elements.deadList.addEventListener('change', (e) => {
   if (e.target.type === 'checkbox') {
     const checkboxes = elements.deadList.querySelectorAll('input[type="checkbox"]');
-    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    const allChecked = Array.from(checkboxes).every((cb) => cb.checked);
     elements.selectAll.checked = allChecked;
     updateDeleteButton();
   }
