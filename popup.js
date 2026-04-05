@@ -22,16 +22,12 @@ const elements = {
   completionMessage: document.getElementById('completion-message')
 };
 
-// State
-let scanResults = null;
-let scanCancelled = false;
+// ── Screen Management ─────────────────────────────────────────────────────────
 
-// Screen Management
 function showScreen(screenId) {
   Object.values(screens).forEach(screen => screen.classList.remove('active'));
   screens[screenId].classList.add('active');
 
-  // Make popup wider for results screen
   if (screenId === 'results') {
     document.body.classList.add('wide');
   } else {
@@ -39,143 +35,31 @@ function showScreen(screenId) {
   }
 }
 
-// Get all bookmarks recursively
-async function getAllBookmarks() {
-  const tree = await chrome.bookmarks.getTree();
-  const bookmarks = [];
+// ── UI Helpers ────────────────────────────────────────────────────────────────
 
-  function traverse(nodes) {
-    for (const node of nodes) {
-      if (node.url) {
-        bookmarks.push({ id: node.id, title: node.title, url: node.url });
-      }
-      if (node.children) {
-        traverse(node.children);
-      }
-    }
-  }
-
-  traverse(tree);
-  return bookmarks;
-}
-
-// Check if URL is valid for checking (http/https only)
-function isCheckableUrl(url) {
-  return url.startsWith('http://') || url.startsWith('https://');
-}
-
-// Check single URL using fetch
-async function checkUrl(url) {
-  console.log('Checking URL:', url);
-
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-    const response = await fetch(url, {
-      method: 'HEAD',
-      signal: controller.signal,
-      redirect: 'follow',
-      credentials: 'omit'  // Prevent auth popups (WWW-Authenticate)
-    });
-
-    clearTimeout(timeoutId);
-    console.log('Response for', url, ':', response.status);
-
-    if (
-      response.ok 
-      || response.status === 401 
-      || response.status === 403
-      || (response.status >= 200 && response.status <= 399)
-    ) {
-      return { status: 'alive', code: response.status };
-    }
-
-    return { status: 'dead', code: response.status };
-  } catch (error) {
-    console.log('Error checking', url, ':', error.message);
-
-    // AbortError means timeout
-    if (error.name === 'AbortError') {
-      return { status: 'dead', reason: 'timeout' };
-    }
-
-    return { status: 'dead', reason: error.message };
-  }
-}
-
-// Update progress UI
 function updateProgress(current, total) {
   const percent = total > 0 ? Math.round((current / total) * 100) : 0;
   elements.progressBar.style.width = `${percent}%`;
   elements.scanProgress.textContent = `${current} / ${total}`;
 }
 
-// Scan all bookmarks
-async function scanBookmarks() {
-  console.log('Starting bookmark scan...');
-  scanCancelled = false;
-  showScreen('scanning');
-  elements.scanStatus.textContent = 'Fetching bookmarks...';
-  updateProgress(0, 0);
-
-  // Yield long enough for the browser to render the scanning screen
-  await new Promise(resolve => setTimeout(resolve, 150));
-
-  const bookmarks = await getAllBookmarks();
-  console.log('Found', bookmarks.length, 'bookmarks');
-
-  if (bookmarks.length === 0) {
-    showResults({
-      total: 0,
-      checked: 0,
-      dead: [],
-      skipped: 0
-    });
-    return;
-  }
-
-  elements.scanStatus.textContent = 'Checking URLs...';
-
-  const results = {
-    total: bookmarks.length,
-    checked: 0,
-    dead: [],
-    skipped: 0
-  };
-
-  for (let i = 0; i < bookmarks.length; i++) {
-    // Check if scan was cancelled
-    if (scanCancelled) {
-      console.log('Scan cancelled by user');
-      return;
-    }
-
-    const bookmark = bookmarks[i];
-    updateProgress(i + 1, bookmarks.length);
-
-    if (!isCheckableUrl(bookmark.url)) {
-      results.skipped++;
-      continue;
-    }
-
-    const result = await checkUrl(bookmark.url);
-    results.checked++;
-
-    if (result.status === 'dead') {
-      results.dead.push(bookmark);
-    }
-  }
-
-  showResults(results);
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
-// Display results
+function updateDeleteButton() {
+  const checkedCount = elements.deadList.querySelectorAll('input[type="checkbox"]:checked').length;
+  elements.btnDelete.disabled = checkedCount === 0;
+  elements.btnDelete.textContent = checkedCount > 0
+    ? `Delete selected bookmarks (${checkedCount})`
+    : 'Delete selected bookmarks';
+}
+
 function showResults(results) {
-  scanResults = results;
   showScreen('results');
 
-  // Build stats HTML
   let statsHtml = `<p>Total bookmarks: ${results.total}</p>`;
   statsHtml += `<p>Checked: ${results.checked}</p>`;
   statsHtml += `<p class="dead-count">Dead links found: ${results.dead.length}</p>`;
@@ -184,7 +68,6 @@ function showResults(results) {
   }
   elements.stats.innerHTML = statsHtml;
 
-  // Handle edge cases
   if (results.total === 0) {
     elements.message.textContent = 'No bookmarks to process';
     elements.message.className = 'message info';
@@ -201,14 +84,12 @@ function showResults(results) {
     return;
   }
 
-  // Show table with dead bookmarks
   elements.message.textContent = '';
   elements.message.className = 'message';
   elements.resultsTableContainer.classList.remove('hidden');
   elements.btnDelete.style.display = '';
   elements.selectAll.checked = true;
 
-  // Populate table
   elements.deadList.innerHTML = '';
   results.dead.forEach(bookmark => {
     const tr = document.createElement('tr');
@@ -225,66 +106,66 @@ function showResults(results) {
   updateDeleteButton();
 }
 
-// Escape HTML to prevent XSS
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-// Update delete button state
-function updateDeleteButton() {
-  const checkedCount = elements.deadList.querySelectorAll('input[type="checkbox"]:checked').length;
-  elements.btnDelete.disabled = checkedCount === 0;
-  elements.btnDelete.textContent = checkedCount > 0
-    ? `Delete selected bookmarks (${checkedCount})`
-    : 'Delete selected bookmarks';
-}
-
-// Delete selected bookmarks
-async function deleteSelectedBookmarks() {
-  const checkboxes = elements.deadList.querySelectorAll('input[type="checkbox"]:checked');
-  let deleted = 0;
-
-  elements.btnDelete.disabled = true;
-  elements.btnDelete.textContent = 'Deleting...';
-
-  for (const checkbox of checkboxes) {
-    try {
-      await chrome.bookmarks.remove(checkbox.dataset.id);
-      deleted++;
-    } catch (error) {
-      console.error('Failed to delete bookmark:', checkbox.dataset.id, error);
-    }
-  }
-
-  showCompletion(deleted);
-}
-
-// Show completion screen
 function showCompletion(deletedCount) {
   showScreen('completion');
   elements.completionMessage.textContent = `Deleted ${deletedCount} dead link${deletedCount !== 1 ? 's' : ''}. Keep your bookmarks clean regularly!`;
 
-  // Auto-redirect to welcome after 3 seconds
   setTimeout(() => {
     showScreen('welcome');
   }, 3000);
 }
 
-// Event Listeners
-elements.btnStart.addEventListener('click', scanBookmarks);
+// ── Background message listener ───────────────────────────────────────────────
+
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === 'SCAN_PROGRESS')   updateProgress(msg.current, msg.total);
+  if (msg.type === 'SCAN_COMPLETE')   showResults(msg.results);
+  if (msg.type === 'SCAN_CANCELLED')  showScreen('welcome');
+  if (msg.type === 'DELETE_COMPLETE') showCompletion(msg.deleted);
+});
+
+// ── State restoration on popup open ──────────────────────────────────────────
+
+async function restoreState() {
+  const { scanStatus, scanProgress, scanResults } = await chrome.storage.local.get([
+    'scanStatus', 'scanProgress', 'scanResults'
+  ]);
+
+  if (scanStatus === 'scanning') {
+    elements.scanStatus.textContent = 'Checking URLs...';
+    if (scanProgress) updateProgress(scanProgress.current, scanProgress.total);
+    showScreen('scanning');
+  } else if (scanStatus === 'done' && scanResults) {
+    showResults(scanResults);
+  } else {
+    showScreen('welcome');
+  }
+}
+
+// ── Event Listeners ───────────────────────────────────────────────────────────
+
+elements.btnStart.addEventListener('click', () => {
+  elements.scanStatus.textContent = 'Fetching bookmarks...';
+  updateProgress(0, 0);
+  showScreen('scanning');
+  chrome.runtime.sendMessage({ type: 'START_SCAN' });
+});
 
 elements.btnCancel.addEventListener('click', () => {
-  scanCancelled = true;
-  showScreen('welcome');
+  chrome.runtime.sendMessage({ type: 'CANCEL_SCAN' });
 });
 
 elements.btnBack.addEventListener('click', () => {
   showScreen('welcome');
 });
 
-elements.btnDelete.addEventListener('click', deleteSelectedBookmarks);
+elements.btnDelete.addEventListener('click', () => {
+  const checkboxes = elements.deadList.querySelectorAll('input[type="checkbox"]:checked');
+  const ids = Array.from(checkboxes).map(cb => cb.dataset.id);
+  elements.btnDelete.disabled = true;
+  elements.btnDelete.textContent = 'Deleting...';
+  chrome.runtime.sendMessage({ type: 'DELETE_BOOKMARKS', ids });
+});
 
 elements.selectAll.addEventListener('change', (e) => {
   const checkboxes = elements.deadList.querySelectorAll('input[type="checkbox"]');
@@ -300,3 +181,7 @@ elements.deadList.addEventListener('change', (e) => {
     updateDeleteButton();
   }
 });
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+restoreState();
