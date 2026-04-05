@@ -129,10 +129,6 @@ async function scanBookmarks() {
 
     if (result.status === 'dead') {
       results.dead.push(bookmark);
-
-      if (results.dead.length >= 3) {
-        await finishScan(results);
-      }
     }
   }
 
