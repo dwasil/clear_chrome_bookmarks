@@ -16,8 +16,10 @@ async function launchBrowser() {
 }
 
 async function getExtensionId(browser) {
-  // Poll targets until the extension service worker appears
-  const deadline = Date.now() + 5000;
+  // Poll targets until the extension service worker appears.
+  // 15 s timeout accommodates slow Chrome startup when Jest is compiling
+  // other test files concurrently (cold-start overhead).
+  const deadline = Date.now() + 15000;
   while (Date.now() < deadline) {
     const targets = await browser.targets();
     const sw = targets.find(
@@ -26,7 +28,7 @@ async function getExtensionId(browser) {
     if (sw) return new URL(sw.url()).hostname;
     await new Promise((r) => setTimeout(r, 100));
   }
-  throw new Error('Extension service worker not found within 5 seconds');
+  throw new Error('Extension service worker not found within 15 seconds');
 }
 
 /**
