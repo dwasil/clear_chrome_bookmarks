@@ -9,7 +9,7 @@ Over time, bookmarks rot — websites shut down, pages get deleted, URLs change.
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/YOUR_EXTENSION_ID)](https://chrome.google.com/webstore/detail/YOUR_EXTENSION_ID)
 -->
 
-[![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)](#)
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)](#tech-stack)
 [![License](https://img.shields.io/badge/License-MIT-green)](#license)
 
 <!-- TODO: add a screenshot or GIF demo here
@@ -29,11 +29,11 @@ Over time, bookmarks rot — websites shut down, pages get deleted, URLs change.
 ## How It Works
 
 1. Click **"Find dead bookmarks"**
-2. The extension scans all your bookmarks by sending HEAD requests to each URL
+2. A background service worker scans all your bookmarks by sending HEAD requests to each URL (5s timeout)
 3. Review the list of dead links found
 4. Click **"Delete selected bookmarks"** to clean up
 
-Non-HTTP URLs (`chrome://`, `javascript:`, etc.) are skipped automatically and reported in the statistics.
+Non-HTTP URLs (`chrome://`, `javascript:`, etc.) are skipped automatically and reported in the statistics. The scan continues even if you close the popup — reopen it to see progress.
 
 ## Installation
 
@@ -53,10 +53,12 @@ Coming soon.
 
 ## Permissions
 
-| Permission                     | Why it's needed                                        |
-| ------------------------------ | ------------------------------------------------------ |
-| `bookmarks`                    | Read and delete bookmarks                              |
-| `host_permissions: <all_urls>` | Send HEAD requests to check if bookmark URLs are alive |
+| Permission                     | Why it's needed                                                      |
+| ------------------------------ | -------------------------------------------------------------------- |
+| `bookmarks`                    | Read and delete bookmarks                                            |
+| `storage`                      | Persist scan state so the popup can reconnect to an in-progress scan |
+| `alarms`                       | Keep the service worker alive during long scans                      |
+| `host_permissions: <all_urls>` | Send HEAD requests to check if bookmark URLs are alive               |
 
 No data leaves your browser. No analytics. No remote servers.
 
@@ -68,12 +70,15 @@ No data leaves your browser. No analytics. No remote servers.
 
 ## Project Structure
 
-```
-manifest.json       # Extension manifest (V3)
+```text
+manifest.json       # MV3 manifest
+background.js       # Service worker — all scanning & deletion logic
 popup.html          # Popup UI (4 screens: welcome → scanning → results → done)
-popup.js            # Core logic: bookmark fetching, URL checking, deletion
+popup.js            # UI state management, messaging to/from background
 styles.css          # Popup styles
-icons/              # Extension icons (16, 48, 128)
+icons/              # Extension icons (16, 48, 128px)
+tests/e2e/          # Puppeteer e2e tests
+pack.sh             # Zips extension for Chrome Web Store upload
 ```
 
 ## Contributing
